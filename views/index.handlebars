@@ -1,0 +1,41 @@
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <br>
+        <h1 class="text-center">Snopes News Scraper</h1>
+        <br>
+        <br>
+      </div>
+    </div>
+
+    {{!-- Create a saved articles page --}}
+    {{!-- Get notes function working -- look at notetaker --}}
+
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <ol>
+          {{#each data}}
+
+          <li class="listItem"><h2>{{title}}</h2>
+          <p>Description: {{description}}</p>
+            <br>
+          <a href="{{link}}" target="blank">Link to Article...</a>
+            <br>
+          <p>{{notes}}</p>
+
+          <button type="button" class="btn btn-success">Save</button>
+          </li>
+          <br>
+
+          {{/each}}
+        </ol>
+      </div>
+    </div>
+
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="../public/app.js"></script>
+</body>
+
+</html>

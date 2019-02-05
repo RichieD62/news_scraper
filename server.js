@@ -1,73 +1,76 @@
 var express = require("express");
 var logger = require("morgan");
 var mongoose = require("mongoose");
-
-// Our scraping tools
-// Axios is a promised-based http library, similar to jQuery's Ajax method
-// It works on the client and on the server
+var exphbs = require("express-handlebars");
 var axios = require("axios");
 var cheerio = require("cheerio");
-
-// Require all models
 var db = require("./models");
 
 var PORT = 3000;
 
-// Initialize Express
 var app = express();
 
-// Configure middleware
-
-// Use morgan logger for logging requests
 app.use(logger("dev"));
-// Parse request body as JSON
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// Make public a static folder
+
 app.use(express.static("public"));
 
+// Set Handlebars.
+var exphbs = require("express-handlebars");
+
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
+
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/unit18Populater", { useNewUrlParser: true });
+mongoose.connect("mongodb://localhost/snopesScrapedData", { useNewUrlParser: true });
 
 // Routes
 
-// A GET route for scraping the echoJS website
+app.get("/", function(req, res) {
+  db.Article.find({}, function(err, data) {
+    res.render("index", {data, data});
+  })
+})
+
+
 app.get("/scrape", function(req, res) {
-  // First, we grab the body of the html with axios
-
-//   $("h2.card-title").each(function (i, element) {
-
-//     var title = $(element).text();
-//     var link = $(element).parent().parent().attr("href");
 
   axios.get("http://www.snopes.com/").then(function(response) {
-    // Then, we load that into cheerio and save it to $ for a shorthand selector
+
     var $ = cheerio.load(response.data);
 
-    // Now, we grab every h2 within an article tag, and do the following:
+
     $("div.media-body").each(function(i, element) {
-      // Save an empty result object
+
       var result = {};
 
-      // Add the text and href of every link, and save them as properties of the result object
-      result.title = $(this).children("h2").text();
-      result.description = $(this).children("p").text();
-      result.link = $(this).parent().attr("href");
+      result.title = $(element).children("h2").text();
+      result.description = $(element).children("p").text();
+      result.link = $(element).parent().attr("href");
 
-      // Create a new Article using the `result` object built from scraping
-      db.Article.create(result)
+    //  for (var i=0; i<db.Article.length; i++) {
+    //    if (result.link === db.Article[i].link) {
+    //      //Don't add to DB
+    //    } else {
+        
+    //    }
+    //  }
+
+    db.Article.create(result)
         .then(function(dbArticle) {
-          // View the added result in the console
           console.log(dbArticle);
         })
         .catch(function(err) {
-          // If an error occurred, log it
           console.log(err);
         });
+      
     });
 
     // Send a message to the client
-    res.send("Scrape Complete");
+    console.log("Scrape Complete");
+    res.redirect("/");
   });
 });
 
