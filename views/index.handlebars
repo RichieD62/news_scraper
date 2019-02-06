@@ -1,35 +1,66 @@
 <body>
-  <div class="container">
+  <div class="container dataArea">
     <div class="row">
       <div class="col-md-12">
         <br>
+        <img id="logo" src="/public/assets/images/snopes_logo.png" alt="Snopes Logo">
         <h1 class="text-center">Snopes News Scraper</h1>
         <br>
         <br>
       </div>
     </div>
 
-    {{!-- Create a saved articles page --}}
     {{!-- Get notes function working -- look at notetaker --}}
 
     <div class="row">
-      <div class="col-md-12 text-center">
-        <ol>
-          {{#each data}}
+      <div class="col-md-12">
 
-          <li class="listItem"><h2>{{title}}</h2>
-          <p>Description: {{description}}</p>
+        {{#each data}}
+
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title">{{title}}</h2>
+            <p class="card-text">{{description}}</p>
+            <a class="card-text" href="{{link}}" target="blank">Link to Article</a>
+            <button class="btn btn-outline-primary saveArticle">Notes</button>
             <br>
-          <a href="{{link}}" target="blank">Link to Article...</a>
+            <div id="user-input">
+              <p>Title</p>
+              <input type="text" id="noteTitle" />
+              <br>
+              <p>Note</p>
+              <textarea id="noteBody"></textarea>
+              <div id="buttons">
+                <div id="action-button">
+                  <button id="saveNote">Submit</button>
+                </div>
+                <button id="deleteNote">Delete All Notes</button>
+
+              </div>
+            </div>
+
+
+
+            {{!-- <button href="#" class="btn btn-outline-primary saveArticle">Notes</button>
             <br>
-          <p>{{notes}}</p>
 
-          <button type="button" class="btn btn-success">Save</button>
-          </li>
-          <br>
+            <form class="create-burger-form" action="/submit" method="POST">
+              <div class="form-group">
+                <input type="text" name="noteTitle" placeholder="title">
+                <input type="text" name="noteBody" placeholder="enter notes here">
+              </div>
+              <button class="btn btn-success" type="submit">Save</button>
+              <button class="btn btn-danger" type="button">Delete</button>
+            </form> --}}
 
-          {{/each}}
-        </ol>
+          </div>
+        </div>
+
+        <br>
+
+
+
+        {{/each}}
       </div>
     </div>
 

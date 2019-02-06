@@ -1,49 +1,36 @@
-$.getJSON("/articles", function(data) {
-    for (var i = 0; i < data.length; i++) {
-      $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
-    }
-  });
-  
-  
-  $(document).on("click", "p", function() {
-    $("#notes").empty();
-    var thisId = $(this).attr("data-id");
-  
-    $.ajax({
-      method: "GET",
-      url: "/articles/" + thisId
-    })
-      .then(function(data) {
-        console.log(data);
-        $("#notes").append("<h2>" + data.title + "</h2>");
-        $("#notes").append("<input id='titleinput' name='title' >");
-        $("#notes").append("<textarea id='bodyinput' name='body'></textarea>");
-        $("#notes").append("<button data-id='" + data._id + "' id='savenote'>Save Note</button>");
-  
-        if (data.note) {
-          $("#titleinput").val(data.note.title);
-          $("#bodyinput").val(data.note.body);
-        }
+$(document).ready(function() {  
+
+  $(document).on("click", "#saveNote", function() {
+      event.preventDefault();
+      var id = $(this).data("id");
+      var baseURL = window.location.origin;
+      var body = $("#noteBody").val().trim();
+      var title = $("#noteTitle").val().trim();
+
+      $.ajax({
+          method: "POST",
+          url: baseURL + "/articles/" + id,
+          data: {
+            title: title,
+            body: body
+          }
+      })
+      .done(function() {
+      $("#noteTitle").val(""); 
+      $("#noteBody").val("");
       });
+     
   });
-  
-  $(document).on("click", "#savenote", function() {
-    var thisId = $(this).attr("data-id");
-  
+
+  $(document).on("click", "#deleteNote", function() {
+    event.preventDefault();
+    var id = $(this).data("id");
+    console.log(id);
     $.ajax({
-      method: "POST",
-      url: "/articles/" + thisId,
-      data: {
-        title: $("#titleinput").val(),
-        body: $("#bodyinput").val()
-      }
-    })
-      .then(function(data) {
-        console.log(data);
-        $("#notes").empty();
-      });
-  
-    $("#titleinput").val("");
-    $("#bodyinput").val("");
+      method: "DELETE",
+      url: "/delete/notes/" + id
+    });
+      location.href = "/articles";
   });
-  
+
+});
