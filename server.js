@@ -28,12 +28,19 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
 // Routes
 
+//Would like to find where saved = false
 app.get("/", function(req, res) {
   db.Article.find({}, function(err, data) {
     res.render("index", {data, data});
   })
 })
 
+//Sales = true
+app.get("/saved", function(req, res) {
+  db.Article.find({}, function(err, data) {
+    res.render("index", {data, data});
+  })
+})
 
 app.get("/scrape", function(req, res) {
 
@@ -73,6 +80,8 @@ app.get("/scrape", function(req, res) {
   });
 });
 
+
+//API Route
 app.get("/articles", function(req, res) {
   db.Article.find({})
     .then(function(dbArticle) {
@@ -83,6 +92,8 @@ app.get("/articles", function(req, res) {
     });
 });
 
+
+//Create new note
 app.post("/articles/:id", function(req, res) {
   db.Note.create(req.body)
     .then(function(dbNote) {
@@ -96,7 +107,9 @@ app.post("/articles/:id", function(req, res) {
     });
 });
 
-app.delete("/delete/notes.:id", function(req, res) {
+
+//Delete Note
+app.delete("/delete/notes/:id", function(req, res) {
   var id = req.params.id;
 
   Note.findByIdAndRemove({"_id": id }, function(err){
@@ -104,7 +117,21 @@ app.delete("/delete/notes.:id", function(req, res) {
       console.log(err);
     }
   })
-})
+});
+
+
+//Save Article
+app.post("/articles/saved/:id", function(req, res) {
+  Article.findOneAndUpdate({ "_id": req.params.id }, { "saved": true})
+  .exec(function(err, result) {
+    if (err) {
+      console.log(err);
+    }
+    else {
+      res.send(result);
+    }
+  });
+});
 
 
 

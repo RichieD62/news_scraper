@@ -1,0 +1,60 @@
+      <div class="col-md-12">
+        <h2>Saved Articles</h2>
+        {{#each data}}
+        {{#if saved}}
+
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title">{{title}}</h2>
+            <p class="card-text">{{description}}</p>
+            <a class="card-text" href="{{link}}" target="blank">Link to Article</a>
+
+
+
+            <div id="user-input">
+              <p>Title</p>
+              <input type="text" id="noteTitle" />
+              <br>
+              <p>Note</p>
+              <textarea id="noteBody"></textarea>
+              <div id="buttons">
+                <div id="action-button">
+                  <button id="saveNote">Submit</button>
+                </div>
+                <button id="deleteNote">Delete All Notes</button>
+
+              </div>
+            </div>
+
+
+
+            {{!-- <button href="#" class="btn btn-outline-primary saveArticle">Notes</button>
+            <br>
+
+            <form class="create-burger-form" action="/submit" method="POST">
+              <div class="form-group">
+                <input type="text" name="noteTitle" placeholder="title">
+                <input type="text" name="noteBody" placeholder="enter notes here">
+              </div>
+              <button class="btn btn-success" type="submit">Save</button>
+              <button class="btn btn-danger" type="button">Delete</button>
+            </form> --}}
+
+          </div>
+        </div>
+
+        <br>
+
+        {{/if}}
+
+        {{/each}}
+      </div>
+
+    </div>
+
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="../public/app.js"></script>
+</body>
+
+</html>
