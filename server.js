@@ -28,19 +28,6 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
 // Routes
 
-//Would like to find where saved = false
-app.get("/", function(req, res) {
-  db.Article.find({}, function(err, data) {
-    res.render("index", {data, data});
-  })
-})
-
-//Sales = true
-app.get("/saved", function(req, res) {
-  db.Article.find({}, function(err, data) {
-    res.render("index", {data, data});
-  })
-})
 
 app.get("/scrape", function(req, res) {
 
@@ -81,6 +68,49 @@ app.get("/scrape", function(req, res) {
 });
 
 
+//Would like to find where saved = false
+app.get("/", function(req, res) {
+  db.Article.find({})
+  .then(function(dbArticle) {
+    var hbsObject = {
+      Article: dbArticle
+    }
+    console.log(hbsObject);
+    res.render("index", hbsObject);
+  })
+  .catch(function(err){
+    res.json(err)
+  })
+})
+
+//Saved = true
+app.get("/saved", function(req, res) {
+  db.Article.find({saved: true}).populate("note")
+  .then(function(dbArticle) {
+    var hbsObject = {
+      Article: dbArticle
+    }
+    res.render("saved", hbsObject);
+  })
+  .catch(function(err){
+    res.json(err);
+  })
+})
+
+//Save Article
+app.post("/articles/saved/:id", function(req, res) {
+  db.Article.findOneAndUpdate({ "_id": req.params.id }, { "saved": true})
+  .exec(function(err, result) {
+    if (err) {
+      console.log(err);
+    }
+    else {
+      res.send(result);
+    }
+  });
+});
+
+
 //API Route
 app.get("/articles", function(req, res) {
   db.Article.find({})
@@ -95,9 +125,11 @@ app.get("/articles", function(req, res) {
 
 //Create new note
 app.post("/articles/:id", function(req, res) {
+  console.log(req.body)
   db.Note.create(req.body)
     .then(function(dbNote) {
-      return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
+      console.log(dbNote)
+      return db.Article.findOneAndUpdate({ _id: req.params.id }, {$push:{ note: dbNote._id }}, { new: true });
     })
     .then(function(dbArticle) {
       res.json(dbArticle);
@@ -112,26 +144,24 @@ app.post("/articles/:id", function(req, res) {
 app.delete("/delete/notes/:id", function(req, res) {
   var id = req.params.id;
 
-  Note.findByIdAndRemove({"_id": id }, function(err){
+  db.Note.findByIdAndRemove({"_id": id }, function(err){
     if (err) {
       console.log(err);
     }
   })
 });
 
+//Delete Article
+app.delete("/delete/article/:id", function(req, res) {
+  var id = req.params.id;
 
-//Save Article
-app.post("/articles/saved/:id", function(req, res) {
-  Article.findOneAndUpdate({ "_id": req.params.id }, { "saved": true})
-  .exec(function(err, result) {
+  db.Article.findByIdAndRemove({"_id": id }, function(err){
     if (err) {
       console.log(err);
     }
-    else {
-      res.send(result);
-    }
-  });
+  })
 });
+
 
 
 

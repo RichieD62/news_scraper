@@ -1,46 +1,68 @@
-      <div class="col-md-12">
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand">Snopes News Scraper</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/scrape">Scrape Articles<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/saved">Saved Articles</a>
+                </li>
+            </ul>
+    </nav>
+    <div class="col-md-12">
         <h2>Saved Articles</h2>
-        {{#each data}}
-        {{#if saved}}
+        {{#each Article}}
+        {{#if this.saved}}
 
         <div class="card">
-          <div class="card-body">
-            <h2 class="card-title">{{title}}</h2>
-            <p class="card-text">{{description}}</p>
-            <a class="card-text" href="{{link}}" target="blank">Link to Article</a>
+            <div class="card-body">
+                <h2 class="card-title">{{this.title}}</h2>
+                <p class="card-text">{{this.description}}</p>
+                <a class="card-text" href="{{this.link}}" target="blank">Link to Article</a>
+                <button class="btn btn-danger saveArticle" id="deleteArticle" data-id={{this._id}}>Delete Article</button>
 
+                <br>
 
-
-            <div id="user-input">
-              <p>Title</p>
-              <input type="text" id="noteTitle" />
-              <br>
-              <p>Note</p>
-              <textarea id="noteBody"></textarea>
-              <div id="buttons">
-                <div id="action-button">
-                  <button id="saveNote">Submit</button>
+                {{#each this.note}}
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-title">{{this.title}}</p>
+                        <p class="card-text">{{this.body}}</p>
+                        <br>
+                        <button class="btn btn-dark" id="deleteNote" data-id={{this._id}}>Delete Note</button>
+                    </div>
                 </div>
-                <button id="deleteNote">Delete All Notes</button>
+                {{/each}}
 
-              </div>
+                <br>
+
+                <div id="user-input">
+                    <p>Title</p>
+                    <input type="text" class="noteTitle {{this._id}}" />
+                    <br>
+                    <p>Note</p>
+                    <textarea class="noteBody" id="{{this._id}}"></textarea>
+
+                    <br>
+
+                    
+                    <button class="btn btn-success" data-id={{this._id}} id="saveNote">Save Note</button>
+
+
+                    </div>
+                </div>
+
             </div>
-
-
-
-            {{!-- <button href="#" class="btn btn-outline-primary saveArticle">Notes</button>
-            <br>
-
-            <form class="create-burger-form" action="/submit" method="POST">
-              <div class="form-group">
-                <input type="text" name="noteTitle" placeholder="title">
-                <input type="text" name="noteBody" placeholder="enter notes here">
-              </div>
-              <button class="btn btn-success" type="submit">Save</button>
-              <button class="btn btn-danger" type="button">Delete</button>
-            </form> --}}
-
-          </div>
         </div>
 
         <br>
@@ -48,13 +70,25 @@
         {{/if}}
 
         {{/each}}
-      </div>
+    </div>
 
     </div>
 
-  </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="../public/app.js"></script>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/app.js"></script>
 </body>
 
 </html>
+
+{{!-- <button href="#" class="btn btn-outline-primary saveArticle">Notes</button>
+<br>
+
+<form class="create-burger-form" action="/submit" method="POST">
+    <div class="form-group">
+        <input type="text" name="noteTitle" placeholder="title">
+        <input type="text" name="noteBody" placeholder="enter notes here">
+    </div>
+    <button class="btn btn-success" type="submit">Save</button>
+    <button class="btn btn-danger" type="button">Delete</button>
+</form> --}}

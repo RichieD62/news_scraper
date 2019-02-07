@@ -1,9 +1,30 @@
 <body>
+
+  <nav class="navbar navbar-expand-lg navbar-light">
+  <a class="navbar-brand">Snopes News Scraper</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="/">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/scrape">Scrape Articles<span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/saved">Saved Articles</a>
+      </li>
+    </ul>
+    </nav>
+
+
   <div class="container dataArea">
     <div class="row">
       <div class="col-md-12">
         <br>
-        <img id="logo" src="/public/assets/images/snopes_logo.png" alt="Snopes Logo">
+        <img id="logo" src="/public/assets/images/news.png" alt="Logo">
       </div>
     </div>
     <div class="row">
@@ -17,21 +38,38 @@
     {{!-- Get notes function working -- look at notetaker --}}
 
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-12">
         <h2>Scraped Articles</h2>
-        {{#each data}}
-        {{#unless saved}}
+        {{#each Article}}
 
         <div class="card">
           <div class="card-body">
-            <h2 class="card-title">{{title}}</h2>
-            <p class="card-text">{{description}}</p>
-            <a class="card-text" href="{{link}}" target="blank">Link to Article</a>
-            <form action="/{{this.id}}" method="POST">
-              <input type="hidden" name="saved" value="false">
-              <button id="saveButton" class="btn btn-outline-primary" type="submit">Save</button>
-            </form>
+            <h2 class="card-title">{{this.title}}</h2>
+            <p class="card-text">{{this.description}}</p>
+            <a class="card-text" href="{{this.link}}" target="blank">Link to Article</a>
+            <button id="saveButton" class="btn btn-primary saveArticle" data-id={{this._id}}>Save Article</button>
             <br>
+
+          </div>
+        </div>
+
+        <br>
+
+
+        {{/each}}
+      </div>
+
+    </div>
+
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="/app.js"></script>
+  <script>console.log("Hello World")</script>
+</body>
+
+</html>
+
+
 
 
             {{!-- <div id="user-input">
@@ -62,76 +100,3 @@
               <button class="btn btn-success" type="submit">Save</button>
               <button class="btn btn-danger" type="button">Delete</button>
             </form> --}}
-
-          </div>
-        </div>
-
-        <br>
-
-        {{/unless}}
-
-        {{/each}}
-      </div>
-
-
-
-      <div class="col-md-6">
-        <h2>Saved Articles</h2>
-        {{#each data}}
-        {{#if saved}}
-
-        <div class="card">
-          <div class="card-body">
-            <h2 class="card-title">{{title}}</h2>
-            <p class="card-text">{{description}}</p>
-            <a class="card-text" href="{{link}}" target="blank">Link to Article</a>
-
-
-
-            <div id="user-input">
-              <p>Title</p>
-              <input type="text" id="noteTitle" />
-              <br>
-              <p>Note</p>
-              <textarea id="noteBody"></textarea>
-              <div id="buttons">
-                <div id="action-button">
-                  <button id="saveNote">Submit</button>
-                </div>
-                <button id="deleteNote">Delete All Notes</button>
-
-              </div>
-            </div>
-
-
-
-            {{!-- <button href="#" class="btn btn-outline-primary saveArticle">Notes</button>
-            <br>
-
-            <form class="create-burger-form" action="/submit" method="POST">
-              <div class="form-group">
-                <input type="text" name="noteTitle" placeholder="title">
-                <input type="text" name="noteBody" placeholder="enter notes here">
-              </div>
-              <button class="btn btn-success" type="submit">Save</button>
-              <button class="btn btn-danger" type="button">Delete</button>
-            </form> --}}
-
-          </div>
-        </div>
-
-        <br>
-
-        {{/if}}
-
-        {{/each}}
-      </div>
-
-    </div>
-
-  </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="../public/app.js"></script>
-</body>
-
-</html>
