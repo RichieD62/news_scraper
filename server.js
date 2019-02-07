@@ -44,17 +44,9 @@ app.get("/scrape", function(req, res) {
       result.description = $(element).children("p").text();
       result.link = $(element).parent().attr("href");
 
-    //  for (var i=0; i<db.Article.length; i++) {
-    //    if (result.link === db.Article[i].link) {
-    //      //Don't add to DB
-    //    } else {
-        
-    //    }
-    //  }
-
     db.Article.create(result)
         .then(function(dbArticle) {
-          console.log(dbArticle);
+          console.log(dbArticle)
         })
         .catch(function(err) {
           console.log(err);
